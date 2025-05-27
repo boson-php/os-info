@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Boson\Component\OsInfo\Factory\Family;
+namespace Boson\Component\OsInfo\Family\Factory;
 
 use Boson\Component\OsInfo\FamilyInterface;
 
@@ -16,9 +16,9 @@ final readonly class EnvFamilyFactory extends FamilyByNameFactory
     public function __construct(
         private FamilyFactoryInterface $delegate,
         /**
-         * @var non-empty-string
+         * @var list<non-empty-string>
          */
-        private string $envVariableName = self::DEFAULT_OVERRIDE_ENV_NAME,
+        private array $envVariableNames = [self::DEFAULT_OVERRIDE_ENV_NAME],
     ) {}
 
     /**
@@ -26,10 +26,12 @@ final readonly class EnvFamilyFactory extends FamilyByNameFactory
      */
     private function tryGetNameFromEnvironment(): ?string
     {
-        $server = $_SERVER[$this->envVariableName] ?? null;
+        foreach ($this->envVariableNames as $name) {
+            $server = $_SERVER[$name] ?? null;
 
-        if (\is_string($server) && $server !== '') {
-            return $server;
+            if (\is_string($server) && $server !== '') {
+                return $server;
+            }
         }
 
         return null;
