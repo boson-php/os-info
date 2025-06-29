@@ -20,17 +20,10 @@ final readonly class Advapi32
     {
         Runtime::assertAvailable();
 
-        $this->ffi = $this->loadLibrary();
-    }
-
-    private function loadLibrary(): \FFI
-    {
-        $code = (string) @\file_get_contents(
+        $this->ffi = \FFI::cdef((string) @\file_get_contents(
             filename: __FILE__,
             offset: __COMPILER_HALT_OFFSET__,
-        );
-
-        return \FFI::cdef($code, 'advapi32.dll');
+        ), 'advapi32.dll');
     }
 
     /**
