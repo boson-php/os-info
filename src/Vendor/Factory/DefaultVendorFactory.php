@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Vendor\Factory;
 
 use Boson\Component\OsInfo\FamilyInterface;
-use Boson\Component\OsInfo\Vendor\VendorInfo;
+use Boson\Component\OsInfo\Vendor\VendorInfoInterface;
 
 final readonly class DefaultVendorFactory implements VendorFactoryInterface
 {
@@ -25,7 +25,7 @@ final readonly class DefaultVendorFactory implements VendorFactoryInterface
         );
     }
 
-    public function createVendor(FamilyInterface $family): VendorInfo
+    public function createVendor(FamilyInterface $family): VendorInfoInterface
     {
         return $this->default->createVendor($family);
     }

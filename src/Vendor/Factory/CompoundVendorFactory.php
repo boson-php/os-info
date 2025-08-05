@@ -6,6 +6,7 @@ namespace Boson\Component\OsInfo\Vendor\Factory;
 
 use Boson\Component\OsInfo\FamilyInterface;
 use Boson\Component\OsInfo\Vendor\VendorInfo;
+use Boson\Component\OsInfo\Vendor\VendorInfoInterface;
 
 final readonly class CompoundVendorFactory implements VendorFactoryInterface
 {
@@ -28,7 +29,7 @@ final readonly class CompoundVendorFactory implements VendorFactoryInterface
         $this->factories = \iterator_to_array($factories, false);
     }
 
-    public function createVendor(FamilyInterface $family): VendorInfo
+    public function createVendor(FamilyInterface $family): VendorInfoInterface
     {
         foreach ($this->factories as $factory) {
             $instance = $factory->createVendor($family);

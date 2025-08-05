@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Factory;
 
-use Boson\Component\OsInfo\OperatingSystem;
+use Boson\Component\OsInfo\OperatingSystemInterface;
 
 interface OperatingSystemFactoryInterface extends OptionalOperatingSystemFactoryInterface
 {
-    public function createOperatingSystem(): OperatingSystem;
+    public function createOperatingSystem(): OperatingSystemInterface;
 }

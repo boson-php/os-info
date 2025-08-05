@@ -8,11 +8,10 @@ use Boson\Component\OsInfo\Factory\DefaultOperatingSystemFactory;
 use Boson\Component\OsInfo\Factory\InMemoryOperatingSystemFactory;
 use Boson\Component\OsInfo\Vendor\VendorInfo;
 
-final readonly class OperatingSystem extends VendorInfo
+final readonly class OperatingSystem extends VendorInfo implements
+    OperatingSystemInterface
 {
     /**
-     * Gets the list of standards supported by this operating system.
-     *
      * @var list<StandardInterface>
      */
     public array $standards;
@@ -25,9 +24,6 @@ final readonly class OperatingSystem extends VendorInfo
      * @param iterable<mixed, StandardInterface> $standards
      */
     public function __construct(
-        /**
-         * Gets the family this operating system belongs to.
-         */
         public FamilyInterface $family,
         string $name,
         string $version,
@@ -48,7 +44,7 @@ final readonly class OperatingSystem extends VendorInfo
     /**
      * @api
      */
-    public static function createFromGlobals(): self
+    public static function createFromGlobals(): OperatingSystemInterface
     {
         /** @phpstan-var InMemoryOperatingSystemFactory $factory */
         static $factory = new InMemoryOperatingSystemFactory(
@@ -58,14 +54,6 @@ final readonly class OperatingSystem extends VendorInfo
         return $factory->createOperatingSystem();
     }
 
-    /**
-     * Checks if this operating system supports the given standard.
-     *
-     * This method checks if any of the standards supported by this operating
-     * system (including standards of its family) supports the given standard.
-     *
-     * @api
-     */
     public function isSupports(StandardInterface $standard): bool
     {
         foreach ($this->standards as $actual) {
@@ -75,10 +63,5 @@ final readonly class OperatingSystem extends VendorInfo
         }
 
         return false;
-    }
-
-    public function __toString(): string
-    {
-        return $this->name;
     }
 }

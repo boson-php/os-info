@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Factory;
 
 use Boson\Component\OsInfo\OperatingSystem;
+use Boson\Component\OsInfo\OperatingSystemInterface;
 
 final readonly class CompoundOperatingSystemFactory implements OperatingSystemFactoryInterface
 {
@@ -27,7 +28,7 @@ final readonly class CompoundOperatingSystemFactory implements OperatingSystemFa
         $this->factories = \iterator_to_array($factories, false);
     }
 
-    public function createOperatingSystem(): OperatingSystem
+    public function createOperatingSystem(): OperatingSystemInterface
     {
         foreach ($this->factories as $factory) {
             $instance = $factory->createOperatingSystem();
