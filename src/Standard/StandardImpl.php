@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Standard;
 
-use Boson\Component\OsInfo\StandardInterface;
+use Boson\Contracts\OsInfo\StandardInterface;
 
 /**
  * @phpstan-require-implements StandardInterface
@@ -19,13 +19,25 @@ trait StandardImpl
         public readonly ?StandardInterface $parent = null,
     ) {}
 
-    public function isSupports(StandardInterface $standard): bool
+    public function is(StandardInterface $standard): bool
     {
-        return $this === $standard || $this->parent?->isSupports($standard) === true;
+        return $this === $standard || $this->parent?->is($standard) === true;
+    }
+
+    public function equals(mixed $other): bool
+    {
+        return $other === $this
+            || ($other instanceof StandardInterface
+                && $other->name === $this->name);
+    }
+
+    public function toString(): string
+    {
+        return $this->name;
     }
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->toString();
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Boson\Component\OsInfo\Vendor\Factory\Win32;
+namespace Boson\Component\OsInfo\Factory\Driver\WindowsRegistry;
 
 use FFI\CData;
 use FFI\CType;

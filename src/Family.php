@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo;
 
 use Boson\Component\OsInfo\Family\Factory\DefaultFamilyFactory;
+use Boson\Component\OsInfo\Family\Factory\FamilyFactoryInterface;
 use Boson\Component\OsInfo\Family\Factory\InMemoryFamilyFactory;
 use Boson\Component\OsInfo\Family\FamilyImpl;
+use Boson\Contracts\OsInfo\FamilyInterface;
 
 require_once __DIR__ . '/Family/constants.php';
 
@@ -80,12 +82,12 @@ final readonly class Family implements FamilyInterface
      */
     public static function createFromGlobals(): FamilyInterface
     {
-        /** @phpstan-var InMemoryFamilyFactory $factory */
         static $factory = new InMemoryFamilyFactory(
             delegate: new DefaultFamilyFactory(),
         );
 
-        return $factory->createFamily();
+        /** @var FamilyFactoryInterface $factory */
+        return $factory->createFamilyFromGlobals();
     }
 
     /**

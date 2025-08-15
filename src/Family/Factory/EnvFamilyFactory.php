@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Family\Factory;
 
 use Boson\Component\OsInfo\Family;
-use Boson\Component\OsInfo\FamilyInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
 
 /**
  * Factory that attempts to detect the OS family from environment variables.
@@ -55,15 +55,15 @@ final readonly class EnvFamilyFactory implements FamilyFactoryInterface
         return null;
     }
 
-    public function createFamily(): FamilyInterface
+    public function createFamilyFromGlobals(): FamilyInterface
     {
         $name = $this->tryGetFamilyFromEnvironmentAsString();
 
         if ($name === null) {
-            return $this->delegate->createFamily();
+            return $this->delegate->createFamilyFromGlobals();
         }
 
         return Family::tryFrom($name)
-            ?? $this->delegate->createFamily();
+            ?? $this->delegate->createFamilyFromGlobals();
     }
 }

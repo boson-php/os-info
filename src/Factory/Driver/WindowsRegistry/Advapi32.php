@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Boson\Component\OsInfo\Vendor\Factory\Win32;
+namespace Boson\Component\OsInfo\Factory\Driver\WindowsRegistry;
 
 use FFI\Env\Runtime;
 
@@ -10,7 +10,7 @@ use FFI\Env\Runtime;
  * @mixin \FFI
  *
  * @internal this is an internal library class, please do not use it in your code
- * @psalm-internal Boson\Component\OsInfo\Vendor\Factory
+ * @psalm-internal Boson\Component\OsInfo\Factory\Driver
  */
 final readonly class Advapi32
 {

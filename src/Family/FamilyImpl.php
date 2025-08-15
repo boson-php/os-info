@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Family;
 
-use Boson\Component\OsInfo\FamilyInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
 
 /**
  * @phpstan-require-implements FamilyInterface
@@ -24,8 +24,20 @@ trait FamilyImpl
         return $this === $family || $this->parent?->is($family) === true;
     }
 
-    public function __toString(): string
+    public function equals(mixed $other): bool
+    {
+        return $other === $this
+            || ($other instanceof FamilyInterface
+                && $other->name === $this->name);
+    }
+
+    public function toString(): string
     {
         return $this->name;
+    }
+
+    public function __toString(): string
+    {
+        return $this->toString();
     }
 }

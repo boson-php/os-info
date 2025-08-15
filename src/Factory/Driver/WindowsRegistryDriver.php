@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Boson\Component\OsInfo\Vendor\Factory;
+namespace Boson\Component\OsInfo\Factory\Driver;
 
+use Boson\Component\OsInfo\Factory\Driver\WindowsRegistry\Advapi32;
 use Boson\Component\OsInfo\Family;
-use Boson\Component\OsInfo\FamilyInterface;
-use Boson\Component\OsInfo\Vendor\Factory\Win32\Advapi32;
-use Boson\Component\OsInfo\Vendor\VendorInfo;
+use Boson\Contracts\OsInfo\FamilyInterface;
 use FFI\CData;
 use FFI\Env\Runtime;
 
-final readonly class Win32VendorFactory implements OptionalVendorFactoryInterface
+final readonly class WindowsRegistryDriver implements
+    NameDriverInterface,
+    VersionDriverInterface,
+    CodenameDriverInterface,
+    EditionDriverInterface
 {
     /**
      * restrict type to REG_SZ
@@ -80,43 +83,55 @@ final readonly class Win32VendorFactory implements OptionalVendorFactoryInterfac
             ->newLazyProxy(static fn() => new Advapi32());
     }
 
-    public function createVendor(FamilyInterface $family): ?VendorInfo
+    public function tryGetName(FamilyInterface $family): ?string
     {
-        // Expects Windows OS and FFI extension
         if (!$family->is(Family::Windows) || !Runtime::isAvailable()) {
             return null;
         }
 
-        try {
-            $version = $this->fetchVersion($this->advapi32)
-                ?? GenericVendorFactory::getDefaultVersion();
+        return $this->tryReadName($this->advapi32);
+    }
 
-            $name = $this->fetchName($this->advapi32, $version)
-                ?? GenericVendorFactory::getDefaultName();
-
-            return new VendorInfo(
-                name: $name,
-                version: $version,
-                codename: $this->fetchCodename($this->advapi32),
-                edition: $this->fetchEdition($this->advapi32),
-            );
-        } catch (\Throwable) {
+    public function tryGetVersion(FamilyInterface $family): ?string
+    {
+        if (!$family->is(Family::Windows) || !Runtime::isAvailable()) {
             return null;
         }
+
+        return $this->tryReadVersion($this->advapi32);
+    }
+
+    public function tryGetCodename(FamilyInterface $family): ?string
+    {
+        if (!$family->is(Family::Windows) || !Runtime::isAvailable()) {
+            return null;
+        }
+
+        return $this->tryReadCodename($this->advapi32);
+    }
+
+    public function tryGetEdition(FamilyInterface $family): ?string
+    {
+        if (!$family->is(Family::Windows) || !Runtime::isAvailable()) {
+            return null;
+        }
+
+        return $this->tryReadEdition($this->advapi32);
     }
 
     /**
-     * @param non-empty-string $version
-     *
      * @return non-empty-string|null
      */
-    private function fetchName(Advapi32 $advapi32, string $version): ?string
+    private function tryReadName(Advapi32 $advapi32): ?string
     {
         $name = $this->getStringKey($advapi32, self::REG_KEY_NAME);
 
         if ($name === '') {
             return null;
         }
+
+        $version = $this->tryReadVersion($advapi32)
+            ?? $this->getVersionFromFallback();
 
         // TODO Windows 11 contain registry bug:
         //      https://superuser.com/questions/1834479/windows-registry-shows-windows-10-pro-despite-running-windows-11-pro
@@ -132,7 +147,7 @@ final readonly class Win32VendorFactory implements OptionalVendorFactoryInterfac
     /**
      * @return non-empty-string|null
      */
-    private function fetchVersion(Advapi32 $advapi32): ?string
+    private function tryReadVersion(Advapi32 $advapi32): ?string
     {
         $major = $this->getDwordKey($advapi32, self::REG_KEY_VERSION_MAJOR);
         $minor = $this->getDwordKey($advapi32, self::REG_KEY_VERSION_MINOR);
@@ -147,9 +162,29 @@ final readonly class Win32VendorFactory implements OptionalVendorFactoryInterfac
     }
 
     /**
+     * @return non-empty-string
+     */
+    private function getVersionFromFallback(): string
+    {
+        if (!\defined('PHP_WINDOWS_VERSION_MAJOR')
+            || !\defined('PHP_WINDOWS_VERSION_MINOR')
+            || !\defined('PHP_WINDOWS_VERSION_BUILD')
+        ) {
+            /** @var non-empty-string */
+            return \php_uname('r');
+        }
+
+        return \vsprintf('%d.%d.%d', [
+            \PHP_WINDOWS_VERSION_MAJOR,
+            \PHP_WINDOWS_VERSION_MINOR,
+            \PHP_WINDOWS_VERSION_BUILD,
+        ]);
+    }
+
+    /**
      * @return non-empty-string|null
      */
-    private function fetchEdition(Advapi32 $advapi32): ?string
+    private function tryReadEdition(Advapi32 $advapi32): ?string
     {
         $edition = $this->getStringKey($advapi32, self::REG_KEY_EDITION);
 
@@ -163,7 +198,7 @@ final readonly class Win32VendorFactory implements OptionalVendorFactoryInterfac
     /**
      * @return non-empty-string|null
      */
-    private function fetchCodename(Advapi32 $advapi32): ?string
+    private function tryReadCodename(Advapi32 $advapi32): ?string
     {
         $codename = $this->getStringKey($advapi32, self::REG_KEY_CODENAME);
 

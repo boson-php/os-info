@@ -4,27 +4,21 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Family\Factory;
 
-use Boson\Component\OsInfo\FamilyInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
 
-/**
- * Default implementation of {@see FamilyFactoryInterface}.
- *
- * Uses a chain of factories to determine the OS family, falling
- * back to a generic implementation.
- */
 final readonly class DefaultFamilyFactory implements FamilyFactoryInterface
 {
-    private FamilyFactoryInterface $default;
+    private FamilyFactoryInterface $factory;
 
     public function __construct()
     {
-        $this->default = EnvFamilyFactory::createForOverrideEnvVariables(
+        $this->factory = EnvFamilyFactory::createForOverrideEnvVariables(
             delegate: new GenericFamilyFactory(),
         );
     }
 
-    public function createFamily(): FamilyInterface
+    public function createFamilyFromGlobals(): FamilyInterface
     {
-        return $this->default->createFamily();
+        return $this->factory->createFamilyFromGlobals();
     }
 }

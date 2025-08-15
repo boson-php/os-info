@@ -2,13 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Boson\Component\OsInfo\Vendor\Factory;
+namespace Boson\Component\OsInfo\Factory\Driver;
 
 use Boson\Component\OsInfo\Family;
-use Boson\Component\OsInfo\FamilyInterface;
-use Boson\Component\OsInfo\Vendor\VendorInfo;
+use Boson\Contracts\OsInfo\FamilyInterface;
 
-final readonly class LinuxVendorFactory implements OptionalVendorFactoryInterface
+final class LinuxOsReleaseDriver implements
+    NameDriverInterface,
+    VersionDriverInterface,
+    CodenameDriverInterface
 {
     /**
      * @var non-empty-string
@@ -35,33 +37,56 @@ final readonly class LinuxVendorFactory implements OptionalVendorFactoryInterfac
      */
     private const string OS_RELEASE_CODENAME_FROM_VERSION = 'VERSION';
 
+    /**
+     * @var array<non-empty-string, string>
+     */
+    private array $info {
+        get {
+            if (!isset($this->info)) {
+                if (!\is_readable($this->osReleasePathname)) {
+                    return $this->info = [];
+                }
+
+                /** @phpstan-ignore-next-line : INI file contains array<non-empty-string, string> */
+                $this->info = (array) @\parse_ini_file($this->osReleasePathname);
+            }
+
+            return $this->info;
+        }
+    }
+
     public function __construct(
         /**
          * @var non-empty-string
          */
-        private string $osReleasePathname = self::OS_RELEASE_PATHNAME,
+        private readonly string $osReleasePathname = self::OS_RELEASE_PATHNAME,
     ) {}
 
-    public function createVendor(FamilyInterface $family): ?VendorInfo
+    public function tryGetName(FamilyInterface $family): ?string
     {
-        if (!$family->is(Family::Unix) || !\is_readable($this->osReleasePathname)) {
+        if (!$family->is(Family::Unix)) {
             return null;
         }
 
-        /** @var array<non-empty-string, string> $info */
-        $info = (array) @\parse_ini_file($this->osReleasePathname);
+        return $this->tryReadName($this->info);
+    }
 
-        $name = $this->fetchName($info)
-            ?? GenericVendorFactory::getDefaultName();
+    public function tryGetVersion(FamilyInterface $family): ?string
+    {
+        if (!$family->is(Family::Unix)) {
+            return null;
+        }
 
-        $version = $this->fetchVersion($info)
-            ?? GenericVendorFactory::getDefaultVersion();
+        return $this->tryReadVersion($this->info);
+    }
 
-        return new VendorInfo(
-            name: $name,
-            version: $version,
-            codename: $this->fetchCodename($info),
-        );
+    public function tryGetCodename(FamilyInterface $family): ?string
+    {
+        if (!$family->is(Family::Unix)) {
+            return null;
+        }
+
+        return $this->tryReadCodename($this->info);
     }
 
     /**
@@ -69,10 +94,10 @@ final readonly class LinuxVendorFactory implements OptionalVendorFactoryInterfac
      *
      * @return non-empty-string|null
      */
-    private function fetchCodename(array $info): ?string
+    private function tryReadCodename(array $info): ?string
     {
-        return $this->fetchCodenameFromVersion($info)
-            ?? $this->fetchRawCodename($info)
+        return $this->tryReadCodenameFromVersion($info)
+            ?? $this->tryReadRawCodename($info)
             ?? null;
     }
 
@@ -81,7 +106,7 @@ final readonly class LinuxVendorFactory implements OptionalVendorFactoryInterfac
      *
      * @return non-empty-string|null
      */
-    private function fetchRawCodename(array $info): ?string
+    private function tryReadRawCodename(array $info): ?string
     {
         $rawCodename = $info[self::OS_RELEASE_CODENAME] ?? '';
 
@@ -93,7 +118,7 @@ final readonly class LinuxVendorFactory implements OptionalVendorFactoryInterfac
      *
      * @return non-empty-string|null
      */
-    private function fetchCodenameFromVersion(array $info): ?string
+    private function tryReadCodenameFromVersion(array $info): ?string
     {
         $version = $info[self::OS_RELEASE_CODENAME_FROM_VERSION] ?? '';
 
@@ -111,10 +136,10 @@ final readonly class LinuxVendorFactory implements OptionalVendorFactoryInterfac
      *
      * @return non-empty-string|null
      */
-    private function fetchVersion(array $info): ?string
+    private function tryReadVersion(array $info): ?string
     {
-        return $this->fetchParsedVersion($info)
-            ?? $this->fetchRawVersion($info)
+        return $this->tryReadParsedVersion($info)
+            ?? $this->tryReadRawVersion($info)
             ?? null;
     }
 
@@ -123,7 +148,7 @@ final readonly class LinuxVendorFactory implements OptionalVendorFactoryInterfac
      *
      * @return non-empty-string|null
      */
-    private function fetchRawVersion(array $info): ?string
+    private function tryReadRawVersion(array $info): ?string
     {
         $rawVersion = $info[self::OS_RELEASE_VERSION] ?? '';
 
@@ -135,13 +160,12 @@ final readonly class LinuxVendorFactory implements OptionalVendorFactoryInterfac
      *
      * @return non-empty-string|null
      */
-    private function fetchParsedVersion(array $info): ?string
+    private function tryReadParsedVersion(array $info): ?string
     {
-        $parsedVersion = GenericVendorFactory::tryParseVersion(
-            version: $info[self::OS_RELEASE_VERSION] ?? '',
-        );
+        \preg_match('/^\d+(?:\.\d+){0,3}/', $info[self::OS_RELEASE_VERSION] ?? '', $matches);
 
-        return $parsedVersion === '' ? null : $parsedVersion;
+        /** @var non-empty-string|null */
+        return $matches[0] ?? null;
     }
 
     /**
@@ -149,7 +173,7 @@ final readonly class LinuxVendorFactory implements OptionalVendorFactoryInterfac
      *
      * @return non-empty-string|null
      */
-    private function fetchName(array $info): ?string
+    private function tryReadName(array $info): ?string
     {
         $name = $info[self::OS_RELEASE_NAME] ?? '';
 

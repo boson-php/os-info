@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Family\Factory;
 
 use Boson\Component\OsInfo\Family;
-use Boson\Component\OsInfo\FamilyInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
 
 /**
  * Factory that creates a {@see FamilyInterface} based on
@@ -20,7 +20,7 @@ final readonly class GenericFamilyFactory implements FamilyFactoryInterface
         private string $name = \PHP_OS_FAMILY,
     ) {}
 
-    public function createFamily(): FamilyInterface
+    public function createFamilyFromGlobals(): FamilyInterface
     {
         return Family::tryFrom($this->name)
             ?? new Family($this->name);

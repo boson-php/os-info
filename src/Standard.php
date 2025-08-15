@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo;
 
-use Boson\Component\OsInfo\Standard\Factory\DefaultStandardsFactory;
-use Boson\Component\OsInfo\Standard\Factory\InMemoryStandardsFactory;
 use Boson\Component\OsInfo\Standard\StandardImpl;
+use Boson\Contracts\OsInfo\StandardInterface;
 
 require_once __DIR__ . '/Standard/constants.php';
 
@@ -38,21 +37,6 @@ final readonly class Standard implements StandardInterface
     private const array CASES = [
         'posix' => self::Posix,
     ];
-
-    /**
-     * @api
-     *
-     * @return list<StandardInterface>
-     */
-    public static function createFromGlobals(): array
-    {
-        /** @phpstan-var InMemoryStandardsFactory $factory */
-        static $factory = new InMemoryStandardsFactory(
-            delegate: new DefaultStandardsFactory(),
-        );
-
-        return $factory->createStandards(Family::createFromGlobals());
-    }
 
     /**
      * Translates a string value into the corresponding {@see Standard} case,
