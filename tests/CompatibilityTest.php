@@ -27,6 +27,10 @@ final class CompatibilityTest extends TestCase
                 get {}
             }
 
+            public function toString(): string {}
+
+            public function equals(mixed $other): bool {}
+
             public function is(StandardInterface $standard): bool {}
 
             public function __toString(): string {}
@@ -43,6 +47,11 @@ final class CompatibilityTest extends TestCase
             public ?FamilyInterface $parent {
                 get {}
             }
+
+            public function toString(): string {}
+
+            public function equals(mixed $other): bool {}
+
 
             public function is(FamilyInterface $family): bool {}
 
