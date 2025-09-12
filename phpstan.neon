@@ -1,0 +1,17 @@
+parameters:
+  level: max
+  scanFiles:
+    - resources/stubs/advapi32.stub.php
+    - resources/stubs/constants.stub
+  excludePaths:
+    - src/Factory/Driver/WindowsRegistry/Advapi32.php
+  strictRules:
+    allRules: true
+  fileExtensions:
+    - php
+  paths:
+    - src
+  tmpDir: vendor/.cache.phpstan
+  ignoreErrors:
+    # PHPStan does not support DbC invariants
+    - '#will always evaluate to true#'
