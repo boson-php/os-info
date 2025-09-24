@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Tests\Factory\Driver;
 
 use Boson\Component\OsInfo\Factory\Driver\UnixGenericDriver;
+use Boson\Component\OsInfo\FamilyInterface;
 use Boson\Component\OsInfo\Tests\TestCase;
-use Boson\Contracts\OsInfo\FamilyInterface;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\Attributes\Group;
 

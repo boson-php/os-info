@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Family\Factory;
 
-use Boson\Contracts\OsInfo\FamilyInterface;
+use Boson\Component\OsInfo\FamilyInterface;
 
 /**
  * Factory that caches (memoize) the created {@see FamilyInterface}
@@ -21,8 +21,8 @@ final class InMemoryFamilyFactory implements FamilyFactoryInterface
         private readonly FamilyFactoryInterface $delegate,
     ) {}
 
-    public function createFamilyFromGlobals(): FamilyInterface
+    public function createFamily(): FamilyInterface
     {
-        return $this->family ??= $this->delegate->createFamilyFromGlobals();
+        return $this->family ??= $this->delegate->createFamily();
     }
 }

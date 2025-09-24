@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Tests\Standard;
 
 use Boson\Component\OsInfo\Standard\BuiltinStandard;
+use Boson\Component\OsInfo\StandardInterface;
 use Boson\Component\OsInfo\Tests\TestCase;
-use Boson\Contracts\OsInfo\StandardInterface;
 use PHPUnit\Framework\Attributes\Group;
 
 #[Group('boson-php/os-info')]

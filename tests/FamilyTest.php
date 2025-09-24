@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Tests;
 
 use Boson\Component\OsInfo\Family;
-use Boson\Contracts\OsInfo\FamilyInterface;
+use Boson\Component\OsInfo\FamilyInterface;
 use PHPUnit\Framework\Attributes\Group;
 
 #[Group('boson-php/os-info')]
@@ -122,21 +122,21 @@ final class FamilyTest extends TestCase
     {
         // Linux is a descendant of Unix
         self::assertTrue(Family::Linux->is(Family::Unix));
-        
+
         // BSD is a descendant of Unix
         self::assertTrue(Family::BSD->is(Family::Unix));
-        
+
         // Solaris is a descendant of BSD and Unix
         self::assertTrue(Family::Solaris->is(Family::BSD));
         self::assertTrue(Family::Solaris->is(Family::Unix));
-        
+
         // Darwin is a descendant of BSD and Unix
         self::assertTrue(Family::Darwin->is(Family::BSD));
         self::assertTrue(Family::Darwin->is(Family::Unix));
-        
+
         // Windows is not a descendant of Unix
         self::assertFalse(Family::Windows->is(Family::Unix));
-        
+
         // Unix is not a descendant of Linux
         self::assertFalse(Family::Unix->is(Family::Linux));
     }
@@ -160,4 +160,4 @@ final class FamilyTest extends TestCase
         self::assertSame(Family::BSD, Family::Solaris->parent);
         self::assertSame(Family::BSD, Family::Darwin->parent);
     }
-} 
+}

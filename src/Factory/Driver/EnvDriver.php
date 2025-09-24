@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Factory\Driver;
 
+use Boson\Component\OsInfo\FamilyInterface;
 use Boson\Component\OsInfo\Standard;
-use Boson\Contracts\OsInfo\FamilyInterface;
-use Boson\Contracts\OsInfo\StandardInterface;
+use Boson\Component\OsInfo\StandardInterface;
 
 final readonly class EnvDriver implements
     NameDriverInterface,

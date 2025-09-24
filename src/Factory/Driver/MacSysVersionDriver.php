@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Factory\Driver;
 
 use Boson\Component\OsInfo\Family;
-use Boson\Contracts\OsInfo\FamilyInterface;
+use Boson\Component\OsInfo\FamilyInterface;
 
 final class MacSysVersionDriver implements
     NameDriverInterface,
