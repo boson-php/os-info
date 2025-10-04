@@ -18,8 +18,8 @@
         "php": "^8.4",
         "ext-pcre": "*",
         "ext-ffi": "*",
-        "ffi/env": "^1.0",
-        "boson-php/value-object-contracts": "^0.19"
+        "boson-php/os-info-contracts": "^0.18",
+        "ffi/env": "^1.0"
     },
     "autoload": {
         "psr-4": {
@@ -36,8 +36,8 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.19.x-dev",
-            "dev-main": "0.19.x-dev"
+            "dev-master": "0.18.x-dev",
+            "dev-main": "0.18.x-dev"
         }
     },
     "config": {

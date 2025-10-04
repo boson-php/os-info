@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Tests;
 
-use Boson\Component\OsInfo\FamilyInterface;
-use Boson\Component\OsInfo\StandardInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
+use Boson\Contracts\OsInfo\StandardInterface;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Group;
 

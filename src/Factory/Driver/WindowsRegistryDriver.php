@@ -6,7 +6,7 @@ namespace Boson\Component\OsInfo\Factory\Driver;
 
 use Boson\Component\OsInfo\Factory\Driver\WindowsRegistry\Advapi32;
 use Boson\Component\OsInfo\Family;
-use Boson\Component\OsInfo\FamilyInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
 use FFI\CData;
 use FFI\Env\Runtime;
 
@@ -27,7 +27,7 @@ final readonly class WindowsRegistryDriver implements
     private const int RRF_RT_REG_DWORD = 0x00000010;
 
     /**
-     * Contains registry root for HKLM runtime.
+     * Contains registry key for WebView2 runtime.
      *
      * ```
      *  ((HKEY)(LONG_PTR)(LONG)0x80000002)

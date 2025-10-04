@@ -10,9 +10,10 @@ use Boson\Component\OsInfo\Factory\Driver\NameDriverInterface;
 use Boson\Component\OsInfo\Factory\Driver\StandardsDriverInterface;
 use Boson\Component\OsInfo\Factory\Driver\VersionDriverInterface;
 use Boson\Component\OsInfo\Family\Factory\FamilyFactoryInterface;
-use Boson\Component\OsInfo\FamilyInterface;
 use Boson\Component\OsInfo\OperatingSystem;
-use Boson\Component\OsInfo\StandardInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
+use Boson\Contracts\OsInfo\OperatingSystemInterface;
+use Boson\Contracts\OsInfo\StandardInterface;
 
 final readonly class OperatingSystemFactory implements OperatingSystemFactoryInterface
 {
@@ -45,9 +46,9 @@ final readonly class OperatingSystemFactory implements OperatingSystemFactoryInt
         $this->drivers = \iterator_to_array($drivers, false);
     }
 
-    public function createOperatingSystem(): OperatingSystem
+    public function createOperatingSystemFromGlobals(): OperatingSystemInterface
     {
-        $family = $this->familyFactory->createFamily();
+        $family = $this->familyFactory->createFamilyFromGlobals();
 
         return new OperatingSystem(
             family: $family,

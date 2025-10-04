@@ -7,12 +7,13 @@ namespace Boson\Component\OsInfo;
 use Boson\Component\OsInfo\Factory\DefaultOperatingSystemFactory;
 use Boson\Component\OsInfo\Factory\InMemoryOperatingSystemFactory;
 use Boson\Component\OsInfo\Factory\OperatingSystemFactoryInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
+use Boson\Contracts\OsInfo\OperatingSystemInterface;
+use Boson\Contracts\OsInfo\StandardInterface;
 
-final readonly class OperatingSystem
+final readonly class OperatingSystem implements OperatingSystemInterface
 {
     /**
-     * Gets the list of standards supported by this operating system.
-     *
      * @var list<StandardInterface>
      */
     public array $standards;
@@ -21,34 +22,20 @@ final readonly class OperatingSystem
      * @param iterable<mixed, StandardInterface> $standards
      */
     public function __construct(
-        /**
-         * Gets the family this operating system belongs to.
-         */
         public FamilyInterface $family,
         /**
-         * Gets the name of the operating system.
-         *
-         * The name should be a non-empty string that uniquely identifies this
-         * operating system. For example, "Ubuntu 22.04 LTS" or "Windows 11".
-         *
          * @var non-empty-string
          */
         public string $name,
         /**
-         * Gets the version of the operating system.
-         *
          * @var non-empty-string
          */
         public string $version,
         /**
-         * Gets the codename of the operating system.
-         *
          * @var non-empty-string|null
          */
         public ?string $codename = null,
         /**
-         * Gets the edition of the operating system.
-         *
          * @var non-empty-string|null
          */
         public ?string $edition = null,
@@ -60,24 +47,16 @@ final readonly class OperatingSystem
     /**
      * @api
      */
-    public static function createFromGlobals(): self
+    public static function createFromGlobals(): OperatingSystemInterface
     {
         static $factory = new InMemoryOperatingSystemFactory(
             delegate: new DefaultOperatingSystemFactory(),
         );
 
         /** @var OperatingSystemFactoryInterface $factory */
-        return $factory->createOperatingSystem();
+        return $factory->createOperatingSystemFromGlobals();
     }
 
-    /**
-     * Checks if this operating system supports the given standard.
-     *
-     * This method checks if any of the standards supported by this operating
-     * system (including standards of its family) supports the given standard.
-     *
-     * @api
-     */
     public function isSupports(StandardInterface $standard): bool
     {
         foreach ($this->standards as $actual) {

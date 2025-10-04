@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Tests;
 
 use Boson\Component\OsInfo\Family;
-use Boson\Component\OsInfo\FamilyInterface;
 use Boson\Component\OsInfo\OperatingSystem;
 use Boson\Component\OsInfo\Standard;
-use Boson\Component\OsInfo\StandardInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
 use Boson\Contracts\OsInfo\OperatingSystemInterface;
+use Boson\Contracts\OsInfo\StandardInterface;
 use PHPUnit\Framework\Attributes\Group;
 
 #[Group('boson-php/os-info')]
@@ -135,6 +135,14 @@ final class OperatingSystemTest extends TestCase
         self::assertTrue($os->isSupports($customStandard));
     }
 
+    public function testCreateFromGlobalsReturnsOperatingSystemInterface(): void
+    {
+        $os = OperatingSystem::createFromGlobals();
+
+        self::assertInstanceOf(OperatingSystemInterface::class, $os);
+        self::assertInstanceOf(OperatingSystem::class, $os);
+    }
+
     public function testCreateFromGlobalsReturnsSameInstanceOnSubsequentCalls(): void
     {
         $os1 = OperatingSystem::createFromGlobals();
@@ -151,4 +159,4 @@ final class OperatingSystemTest extends TestCase
         self::assertNotEmpty($os->version);
         self::assertInstanceOf(FamilyInterface::class, $os->family);
     }
-}
+} 

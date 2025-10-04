@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Standard;
 
-use Boson\Component\OsInfo\StandardInterface;
+use Boson\Contracts\OsInfo\StandardInterface;
 
 /**
  * @phpstan-require-implements StandardInterface

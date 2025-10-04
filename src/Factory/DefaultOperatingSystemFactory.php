@@ -14,7 +14,7 @@ use Boson\Component\OsInfo\Factory\Driver\WindowsGenericDriver;
 use Boson\Component\OsInfo\Factory\Driver\WindowsRegistryDriver;
 use Boson\Component\OsInfo\Family\Factory\DefaultFamilyFactory;
 use Boson\Component\OsInfo\Family\Factory\FamilyFactoryInterface;
-use Boson\Component\OsInfo\OperatingSystem;
+use Boson\Contracts\OsInfo\OperatingSystemInterface;
 
 final readonly class DefaultOperatingSystemFactory implements OperatingSystemFactoryInterface
 {
@@ -26,7 +26,7 @@ final readonly class DefaultOperatingSystemFactory implements OperatingSystemFac
         $this->factory = new OperatingSystemFactory(
             familyFactory: $familyFactory,
             drivers: [
-                EnvDriver::createForOverrideEnvVariables(),
+                new EnvDriver(),
                 new WindowsRegistryDriver(),
                 new WindowsGenericDriver(),
                 new MacLicenseAwareDriver(),
@@ -38,8 +38,8 @@ final readonly class DefaultOperatingSystemFactory implements OperatingSystemFac
         );
     }
 
-    public function createOperatingSystem(): OperatingSystem
+    public function createOperatingSystemFromGlobals(): OperatingSystemInterface
     {
-        return $this->factory->createOperatingSystem();
+        return $this->factory->createOperatingSystemFromGlobals();
     }
 }

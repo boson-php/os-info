@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Factory\Driver;
 
 use Boson\Component\OsInfo\Family;
-use Boson\Component\OsInfo\FamilyInterface;
 use Boson\Component\OsInfo\Standard;
-use Boson\Component\OsInfo\StandardInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
+use Boson\Contracts\OsInfo\StandardInterface;
 
 final readonly class GenericDriver implements
     NameDriverInterface,

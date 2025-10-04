@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Family\Factory;
 
-use Boson\Component\OsInfo\FamilyInterface;
+use Boson\Contracts\OsInfo\FamilyInterface;
 
 final readonly class DefaultFamilyFactory implements FamilyFactoryInterface
 {
@@ -17,8 +17,8 @@ final readonly class DefaultFamilyFactory implements FamilyFactoryInterface
         );
     }
 
-    public function createFamily(): FamilyInterface
+    public function createFamilyFromGlobals(): FamilyInterface
     {
-        return $this->factory->createFamily();
+        return $this->factory->createFamilyFromGlobals();
     }
 }
