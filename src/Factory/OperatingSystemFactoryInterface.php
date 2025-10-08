@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Factory;
 
-use Boson\Contracts\OsInfo\OperatingSystemInterface;
+use Boson\Component\OsInfo\OperatingSystem;
 
 /**
  * Interface for factories that are guaranteed to create an instance of
- * {@see OperatingSystemInterface} based on external parameters.
+ * {@see OperatingSystem} based on external parameters.
  */
 interface OperatingSystemFactoryInterface
 {
     /**
-     * Creates and returns a {@see OperatingSystemInterface} instance.
+     * Creates and returns a {@see OperatingSystem} instance.
      */
-    public function createOperatingSystemFromGlobals(): OperatingSystemInterface;
+    public function createOperatingSystem(): OperatingSystem;
 }

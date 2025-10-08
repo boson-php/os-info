@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo\Tests;
 
 use Boson\Component\OsInfo\Standard;
-use Boson\Contracts\OsInfo\StandardInterface;
+use Boson\Component\OsInfo\StandardInterface;
 use PHPUnit\Framework\Attributes\Group;
 
 #[Group('boson-php/os-info')]
@@ -89,4 +89,4 @@ final class StandardTest extends TestCase
     {
         self::assertTrue(Standard::Posix->is(Standard::Posix));
     }
-} 
+}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Family;
 
-use Boson\Contracts\OsInfo\FamilyInterface;
+use Boson\Component\OsInfo\FamilyInterface;
 
 /**
  * @internal this is an internal library class, please do not use it in your code

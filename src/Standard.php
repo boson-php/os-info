@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Boson\Component\OsInfo;
 
 use Boson\Component\OsInfo\Standard\StandardImpl;
-use Boson\Contracts\OsInfo\StandardInterface;
 
 require_once __DIR__ . '/Standard/constants.php';
 

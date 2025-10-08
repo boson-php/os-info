@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Boson\Component\OsInfo\Factory;
 
-use Boson\Contracts\OsInfo\OperatingSystemInterface;
+use Boson\Component\OsInfo\OperatingSystem;
 
 final class InMemoryOperatingSystemFactory implements OperatingSystemFactoryInterface
 {
-    private ?OperatingSystemInterface $current = null;
+    private ?OperatingSystem $current = null;
 
     public function __construct(
         private readonly OperatingSystemFactoryInterface $delegate,
     ) {}
 
-    public function createOperatingSystemFromGlobals(): OperatingSystemInterface
+    public function createOperatingSystem(): OperatingSystem
     {
-        return $this->current ??= $this->delegate->createOperatingSystemFromGlobals();
+        return $this->current ??= $this->delegate->createOperatingSystem();
     }
 }
